@@ -8,10 +8,10 @@ Feature: User Authentication tests
     And User enter the email-address as "customer@practicesoftwaretesting.com"
     And User enter the password as "welcome01"
     When User click on the login button
-    Then Login should be success
+    Then Login should be success and profile name "Jane Doe" is displayed
 
   Scenario: Login should not be success
     Given User enter the email-address as "customer@practicesoftwaretest.com"
     Given User enter the password as "Passtest"
     When User click on the login button
-    But Login should fail
+    But Login should fail and the text "My Account" not visible

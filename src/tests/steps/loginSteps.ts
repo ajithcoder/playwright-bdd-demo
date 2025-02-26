@@ -1,44 +1,41 @@
-import { expect } from "@playwright/test";
-import { createBdd } from "playwright-bdd";
+import { Given, When, Then } from "../fixtures/fixtures";
 
-const { Given, When, Then } = createBdd();
-
-Given("User navigates to the application", async ({ page }) => {
-  await page.goto("/");
+Given("User navigates to the application", async ({ loginPage }) => {
+  await loginPage.navigateToLogin();
 });
 
-Given("User click on the Sign In link", async ({ page }) => {
-  await page.locator('[data-test="nav-sign-in"]').click();
+Given("User click on the Sign In link", async ({ loginPage }) => {
+  await loginPage.clickSignIn();
 });
 
 Given(
   "User enter the email-address as {string}",
-  async ({ page }, emailAddress: string) => {
-    await page.locator('[data-test="email"]').fill(emailAddress);
+  async ({ loginPage }, emailAddress: string) => {
+    await loginPage.enterEmail(emailAddress);
   }
 );
 
 Given(
   "User enter the password as {string}",
-  async ({ page }, password: string) => {
-    await page.locator('[data-test="password"]').fill(password);
+  async ({ loginPage }, password: string) => {
+    await loginPage.enterPassword(password);
   }
 );
 
-When("User click on the login button", async ({ page }) => {
-  await page.locator('[data-test="login-submit"]').click();
+When("User click on the login button", async ({ loginPage }) => {
+  await loginPage.clickLogin();
 });
 
-Then("Login should be success", async ({ page }) => {
-  await expect(page.locator('[data-test="nav-menu"]')).toContainText(
-    "Jane Doe"
-  );
-  await expect(page.locator('[data-test="page-title"]')).toContainText(
-    "My account"
-  );
-});
+Then(
+  "Login should be success and profile name {string} is displayed",
+  async ({ loginPage }, profileName: string) => {
+    await loginPage.userLoginSuccessCheck(profileName);
+  }
+);
 
-When("Login should fail", async ({ page }) => {
-    await expect(page.locator('[data-test="page-title"]:has-text("My Account")')).not.toBeAttached();
-    await expect(page.getByTestId('login-error')).toBeVisible();
-});
+When(
+  "Login should fail and the text {string} not visible",
+  async ({ loginPage }, profileText: string) => {
+    await loginPage.userLoginUnsuccessfulCheck(profileText);
+  }
+);
