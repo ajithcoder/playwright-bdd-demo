@@ -1,4 +1,5 @@
 import { expect, Locator, Page } from "@playwright/test";
+import fs from 'fs';
 
 export class LoginPage {
   public readonly signInButtonLocator: Locator;
@@ -43,6 +44,15 @@ export class LoginPage {
   async userLoginSuccessCheck(profileName: string) {
     await expect(this.page.getByTestId("login-error")).not.toBeVisible();
     await expect(this.profileSection).toHaveText(profileName);
+    
+  }
+
+  async preserveAuthenticationState(){
+    const storagePath = ".auth/storageState1.json";
+    if (fs.existsSync(storagePath)) {
+      fs.unlinkSync(storagePath);
+    }
+    await this.page.context().storageState({path: storagePath });
   }
 
   async userLoginUnsuccessfulCheck(profileText: string) {
@@ -52,3 +62,4 @@ export class LoginPage {
     await expect(this.page.getByTestId("login-error")).toBeVisible();
   }
 }
+ 

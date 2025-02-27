@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 import { defineBddConfig } from 'playwright-bdd';
 
 const testDir = defineBddConfig({
-  features: 'src/tests/features/',
+  featuresRoot: 'src/tests/features',
   steps: 'src/tests/steps/*.ts',
   importTestFrom: 'src/tests/fixtures/fixtures.ts',
   disableWarnings: { importTestFrom: true }

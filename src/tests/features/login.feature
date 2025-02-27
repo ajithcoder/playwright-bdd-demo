@@ -15,3 +15,4 @@ Feature: User Authentication tests
     Given User enter the password as "Passtest"
     When User click on the login button
     But Login should fail and the text "My Account" not visible
+
