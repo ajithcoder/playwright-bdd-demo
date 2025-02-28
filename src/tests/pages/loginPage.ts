@@ -1,4 +1,4 @@
-import { expect, Locator, Page } from "@playwright/test";
+import { BrowserContext, expect, Locator, Page } from "@playwright/test";
 import fs from 'fs';
 
 export class LoginPage {
@@ -7,6 +7,7 @@ export class LoginPage {
   public readonly passwordLocator: Locator;
   public readonly loginButtonLocator: Locator;
   public readonly profileSection: Locator;
+  public context: BrowserContext;
 
   constructor(public page: Page) {
     this.signInButtonLocator = page.locator('[data-test="nav-sign-in"]');
@@ -47,12 +48,18 @@ export class LoginPage {
     
   }
 
-  async preserveAuthenticationState(){
-    const storagePath = ".auth/storageState1.json";
+  async preserveAuthenticationState(profileName: string){
+    const storagePath = `.auth/${profileName}.json`;
     if (fs.existsSync(storagePath)) {
       fs.unlinkSync(storagePath);
     }
-    await this.page.context().storageState({path: storagePath });
+    if (!fs.existsSync(storagePath)) {
+      this.context = await this.page.context();
+      await this.context.storageState({ path: storagePath });
+    } else {
+      const cookies = await JSON.parse(fs.readFileSync(storagePath, 'Utf-8'));
+      await this.page.context().addCookies(cookies.cookies);
+    }
   }
 
   async userLoginUnsuccessfulCheck(profileText: string) {

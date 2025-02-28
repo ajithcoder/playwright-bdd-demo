@@ -30,7 +30,7 @@ Then(
   "Login should be success and profile name {string} is displayed",
   async ({ loginPage }, profileName: string) => {
     await loginPage.userLoginSuccessCheck(profileName);
-    await loginPage.preserveAuthenticationState();
+    await loginPage.preserveAuthenticationState(profileName.split(' ')[0]);
   }
 );
 

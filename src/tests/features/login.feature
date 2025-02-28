@@ -4,11 +4,16 @@ Feature: User Authentication tests
     Given User navigates to the application
     And User click on the Sign In link
 
-  Scenario: Login should be success
-    And User enter the email-address as "customer@practicesoftwaretesting.com"
-    And User enter the password as "welcome01"
+  Scenario Outline: Login should be success
+    And User enter the email-address as "<email>"
+    And User enter the password as "<password>"
     When User click on the login button
-    Then Login should be success and profile name "Jane Doe" is displayed
+    Then Login should be success and profile name "<profileName>" is displayed
+
+    Examples:
+      | email                                | password     | profileName |
+      | customer@practicesoftwaretesting.com | welcome01    | Jane Doe    |
+      | test@testmail.com                    | 123Atest.com | Test tested |
 
   Scenario: Login should not be success
     Given User enter the email-address as "customer@practicesoftwaretest.com"
