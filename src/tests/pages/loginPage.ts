@@ -48,6 +48,7 @@ export class LoginPage {
     
   }
 
+  // preserve cookies for reusable authentication state
   async preserveAuthenticationState(profileName: string){
     const storagePath = `.auth/${profileName}.json`;
     if (fs.existsSync(storagePath)) {
